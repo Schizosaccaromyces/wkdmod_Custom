@@ -1024,7 +1024,8 @@ bool PlayerMHit(int pnum, Monster *monster, int dist, int mind, int maxd, Missil
 			hper = 100 - (tac / 2) - (dist * 2);
 		}
 	} else if (monster != nullptr) {
-		hper += (monster->level(sgGameInitInfo.nDifficulty) * 2) - (player._pLevel * 2) - (dist * 2);
+		int tacSP = (player.GetArmor() / 20);
+		hper += (monster->level(sgGameInitInfo.nDifficulty) * 2) - (player._pLevel * 2) - (dist / 2) - (tacSP);
 	}
 
 	int minhit = 10;
@@ -1087,9 +1088,7 @@ bool PlayerMHit(int pnum, Monster *monster, int dist, int mind, int maxd, Missil
 		dam += player._pIGetHit;
 	}
 
-	if ((resper <= 0 && blk < blkper)
-		|| (resper <= 0 && blk < blkper && mtype == MissileID::Arrow))
-	
+	if ((resper <= 0 || gbIsHellfire) && blk < blkper)
 	{
 		Direction dir = player._pdir;
 		if (monster != nullptr) {
